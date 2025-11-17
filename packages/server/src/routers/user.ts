@@ -2,7 +2,7 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
 // 导入共享类型
-import { User, UserProfileOutput } from '@fullstack-ts-app/common';
+import { User, UserProfileOutput } from '@t3-elegance/common';
 
 const t = initTRPC.create(); // 初始化 tRPC
 

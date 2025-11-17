@@ -1,4 +1,4 @@
-# Fullstack TypeScript Application
+# T3-Elegance
 
 一个现代化的全栈 TypeScript 应用，展示了端到端类型安全、Monorepo 架构和最佳实践。
 
@@ -7,7 +7,7 @@
 本项目采用 **Monorepo** 架构，使用 **pnpm workspaces** 管理多个相互依赖的包：
 
 ```
-fullstack-ts-app/
+t3-elegance/
 ├── packages/
 │   ├── client/          # React 前端应用
 │   ├── server/          # Express + tRPC 后端服务
@@ -141,7 +141,7 @@ packages:
 ### 安装依赖
 
 ```bash
-cd fullstack-ts-app
+cd t3-elegance
 pnpm install
 ```
 

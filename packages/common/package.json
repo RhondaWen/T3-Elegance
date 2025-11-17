@@ -1,5 +1,5 @@
 {
-  "name": "@fullstack-ts-app/common",
+  "name": "@t3-elegance/common",
   "version": "1.0.0",
   "main": "src/types.ts",
   "private": true,
