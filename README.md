@@ -89,41 +89,7 @@ t3-elegance/
 
 ### 数据流架构
 
-```mermaid
-graph TD
-    %% 1. Frontend (Client)
-    subgraph Frontend [Frontend (Client)]
-        A[App.tsx (UI 组件)] --> B(trpc.ts <br/> tRPC Client)
-        B --> C[React Query <br/> 数据缓存]
-    end
-
-    %% HTTP/JSON RPC Link (连接前后端)
-    A --> D{HTTP/JSON RPC 调用 <br/> (类型安全)}
-
-    %% 2. Backend (Server)
-    subgraph Backend [Backend (Server)]
-        D --> E[server.ts (Express)]
-        E --> F[_app.ts (路由聚合)]
-        F --> G[user.ts (业务逻辑)]
-        G --> H[trpc.ts (tRPC 基础)]
-        H --> I[context.ts (Prisma 注入)]
-    end
-
-    %% 3. Database
-    subgraph Database [Database (Prisma + SQLite)]
-        I --> J[schema.prisma (数据模型)]
-        J --> K[migrations (版本控制)]
-        K --> L[dev.db (SQLite 文件)]
-    end
-
-    %% 4. Shared (Common)
-    style Shared fill:#f9f,stroke:#333,stroke-dasharray: 5 5
-    Shared((types.ts <br/> 共享类型定义))
-
-    %% 额外连接（虚线连接）
-    I -.-> Shared
-    A -.-> Shared
-```
+![tRPC 数据流架构图](images/architecture_diagram.png)
 
 ## 🛠️ 技术栈
 
