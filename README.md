@@ -116,11 +116,11 @@ graph TD
         K --> L[dev.db (SQLite 文件)]
     end
 
-    %% 4. Shared (Common) - 这个部分通常是独立文件，我们用虚线连接表示共享关系
+    %% 4. Shared (Common)
     style Shared fill:#f9f,stroke:#333,stroke-dasharray: 5 5
     Shared((types.ts <br/> 共享类型定义))
 
-    %% 额外连接（显示 context.ts 对 types.ts 的依赖或使用）
+    %% 额外连接（虚线连接）
     I -.-> Shared
     A -.-> Shared
 ```
