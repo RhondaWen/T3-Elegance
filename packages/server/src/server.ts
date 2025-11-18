@@ -1,12 +1,13 @@
 // packages/server/src/server.ts
-
 import express from 'express';
 import cors from 'cors';
 // 导入 tRPC 适配器，用于将 tRPC 挂载到 Express
 import * as trpcExpress from '@trpc/server/adapters/express'; 
+import { appRouter } from './routers/_app'; // <-- 从这里导入主路由
+import { createContext } from './context';
 
-// 从您的 tRPC 路由文件导入 appRouter
-import { appRouter } from './routers/user'; 
+// // 从您的 tRPC 路由文件导入 appRouter
+// import { appRouter } from './routers/user'; 
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,8 @@ app.use(
   '/trpc',
   trpcExpress.createExpressMiddleware({
     router: appRouter,
+    //
+    createContext, 
     // context: () => ({}), // 通常用于传递身份验证信息、数据库连接等
   }),
 );

@@ -6,10 +6,15 @@
     "rootDir": "./src",
     "module": "commonjs",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "references": [
     {"path": "../common"} // 引用共享包
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true
+  }
 }

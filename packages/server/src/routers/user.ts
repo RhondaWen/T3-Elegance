@@ -1,33 +1,58 @@
 // packages/server/src/routers/user.ts
-import { initTRPC } from '@trpc/server';
+// ------------------------------
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 // 导入共享类型
-import { User, UserProfileOutput } from '@t3-elegance/common';
+import { UserProfileOutput } from '@t3-elegance/common';
+import { router, publicProcedure } from './trpc';
 
-const t = initTRPC.create(); // 初始化 tRPC
+export const userRouter = router({
+  // 示例: 创建一个新用户 (Mutation)
+  createUser: publicProcedure
+    .input(z.object({ name: z.string().min(2), email: z.string().email() }))
+    .mutation(async ({ input, ctx }) => {
+      // ctx.prisma 现在可用！
+      const user = await ctx.prisma.user.create({
+        data: {
+          name: input.name,
+          email: input.email,
+        },
+      });
+      return user; // 返回新创建的用户
+    }),
 
-export const appRouter = t.router({
-    // 1. 定义 API 过程
-    getUserDetails: t.procedure
-        // 2. 运行时输入验证
-        .input(z.object({ userId: z.string() })) 
-        // 3. 约束输出类型 (确保返回结构与共享类型一致)
-        .output(z.custom<UserProfileOutput>()) 
-        .query(({ input }): UserProfileOutput => {
-            console.log(`Fetching details for user: ${input.userId}`);
-            
-            // 模拟数据库查询结果
-            const userData: User = { 
-                id: input.userId, 
-                name: 'Alice Ts', 
-                email: 'alice@ts.com' 
-            };
-            
-            return {
-                success: true,
-                data: { ...userData, totalPosts: 10 }
-            };
-        }),
+  // 示例: 获取用户详情 (Query)
+  getUserDetails: publicProcedure
+    .input(z.object({ userId: z.string().cuid() }))
+    .output(z.custom<UserProfileOutput>()) // 假设 output 验证器已配置
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: input.userId },
+        include: { posts: true }, // 包含用户的帖子
+      });
+
+      if (!user) {
+         // 使用 tRPC 内建的错误机制
+         throw new TRPCError({
+           code: 'NOT_FOUND',
+           message: 'User not found',
+         });
+      }
+
+      // 构造符合 UserProfileOutput 的数据
+      return {
+        success: true,
+        data: {
+          id: user.id,
+          name: user.name ?? 'N/A',
+          email: user.email,
+          totalPosts: user.posts.length,
+        },
+      } as UserProfileOutput; // 强制类型转换，因为 Zod 验证已通过
+    }),
 });
-// 导出类型供前端使用 (最关键的一步)
-export type AppRouter = typeof appRouter;
+
+
+
+
+
